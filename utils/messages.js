@@ -1,7 +1,7 @@
 module.exports.MOVIE_NOT_FOUND = 'Сохраненный фильм по указанному id не найден';
 module.exports.FORBIDDEN = 'Нет прав для совершения этого действия';
 module.exports.USER_NOT_FOUND = 'Пользователь по указанному id не найден';
-module.exports.PAGE_NOT_FOUND = 'Запрашиваемый ресурс не найден';
+module.exports.PAGE_NOT_FOUND = 'Ресурс не найден';
 module.exports.SERVER_ERROR = 'Ошибка сервера';
 module.exports.CONFLICT = 'Пользоватьель с таким email уже существует';
 module.exports.BAD_REQUEST = 'Переданы некорректные данные';
