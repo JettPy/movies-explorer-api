@@ -1,11 +1,31 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+const { registration, login, logout } = require('../controllers/users');
+const auth = require('../middlewares/auth');
 const users = require('./users');
 const movies = require('./movies');
 const HttpError = require('../utils/HttpError');
 const { PAGE_NOT_FOUND } = require('../utils/messages');
 
-router.use('/users', users);
-router.use('/movies', movies);
+router.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    name: Joi.string().required(),
+  }),
+}), registration);
+
+router.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+}), login);
+
+router.post('/signout', auth, logout);
+
+router.use('/users', auth, users);
+router.use('/movies', auth, movies);
 
 router.use('*', () => {
   throw new HttpError(404, PAGE_NOT_FOUND);
