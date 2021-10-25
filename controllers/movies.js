@@ -5,7 +5,7 @@ const { MOVIE_NOT_FOUND, FORBIDDEN } = require('../utils/messages');
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
     .populate(['owner'])
-    .then((movies) => res.status(200).send(movies))
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -38,18 +38,18 @@ module.exports.saveMovie = (req, res, next) => {
     nameRU,
     nameEN,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.send(movie))
     .catch(next);
 };
 
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.id)
     .orFail(new HttpError(404, MOVIE_NOT_FOUND))
+    .populate(['owner'])
     .then((movie) => {
-      if (movie.owner.toString() === req.user._id.toString()) {
-        Movie.findByIdAndRemove(req.params.id)
-          .populate(['owner'])
-          .then((delitedMovie) => res.status(200).send(delitedMovie))
+      if (movie.owner._id.toString() === req.user._id.toString()) {
+        movie.remove()
+          .then((delitedMovie) => res.send(delitedMovie))
           .catch(next);
       } else {
         throw new HttpError(403, FORBIDDEN);
