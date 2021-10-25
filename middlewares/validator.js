@@ -1,4 +1,13 @@
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
+const { BAD_REQUEST } = require('../utils/messages');
+
+const urlValidator = (value, helpers) => {
+  if (validator.isURL(value)) {
+    return value;
+  }
+  return helpers.message(BAD_REQUEST);
+};
 
 module.exports.registrationValidator = celebrate({
   body: Joi.object().keys({
@@ -22,10 +31,10 @@ module.exports.saveMovieValidator = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(/^(https?:\/\/(www\.)?)[\w\-._~:/?#[\]@!$&'()*+,;=]+#?$/),
-    trailer: Joi.string().required().pattern(/^(https?:\/\/(www\.)?)[\w\-._~:/?#[\]@!$&'()*+,;=]+#?$/),
-    thumbnail: Joi.string().required().pattern(/^(https?:\/\/(www\.)?)[\w\-._~:/?#[\]@!$&'()*+,;=]+#?$/),
-    movieId: Joi.string().required(),
+    image: Joi.string().required().custom(urlValidator),
+    trailer: Joi.string().required().custom(urlValidator),
+    thumbnail: Joi.string().required().custom(urlValidator),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

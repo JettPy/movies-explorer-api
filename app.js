@@ -18,11 +18,12 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json({ extended: true }));
 app.use(cookieParser());
-app.use(limiter);
 
 mongoose.connect(NODE_ENV === 'production' ? DATA_BASE : DEV_DATA_BASE);
 
 app.use(requestLogger);
+
+app.use(limiter);
 
 app.use('/', router);
 
