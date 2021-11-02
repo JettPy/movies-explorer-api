@@ -8,13 +8,13 @@ const { limiter } = require('./middlewares/limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes/index');
 const { errorHandler } = require('./middlewares/errorHandler');
-const { DEV_DATA_BASE } = require('./utils/config');
+const { DEV_DATA_BASE, ORIGINS } = require('./utils/config');
 
 const { NODE_ENV, PORT = 3000, DATA_BASE } = process.env;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: ORIGINS }));
 app.use(helmet());
 app.use(express.json({ extended: true }));
 app.use(cookieParser());
